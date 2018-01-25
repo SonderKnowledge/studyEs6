@@ -224,4 +224,31 @@ if (true)
  */
 const PI = 3.1415;
 PI // 3.1415
-PI = 3; // TypeError: Assignment to constant variable.
+PI = 3; // TypeError: Assignment to constant variable
+
+// 下面的代码常量foo存储的是一个地址指向一个对象不可变的是这个地址对象是可变的
+const foo = {};
+// 为foo添加一个属性可以成功
+foo.prop = 123;
+foo.prop // 123
+// 将foo指向另一个对象就会报错
+foo = {}; // TypeError: "foo" is read-only
+
+// 要想将对象冻结应该使用 Obejct.freeze方法
+const foo = Object.freeze({});
+// 常规模式下,下面一行代码不会起作用 严格模式下回报错
+foo.prop = 123;
+
+// 除了将对象本身冻结对象的属性也应该冻结，以下是彻底冻结的函数
+var constantize = (obj) => {
+  Object.freeze(obj);
+  Object.keys(obj).forEach((key, i) => {
+    if (typeof obj[key] === 'object') {
+      constantize(obj[key]);
+    }
+  });
+};
+
+/**
+ * ES6声明变量的六种方法
+ */
