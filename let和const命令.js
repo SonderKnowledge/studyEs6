@@ -252,3 +252,32 @@ var constantize = (obj) => {
 /**
  * ES6声明变量的六种方法
  */
+// ES5 var function
+// ES6 var function let const import class
+
+/**
+ * 顶层对象的属性
+ * 顶层对象在浏览器环境是window对象在Node指的是global对象
+ * 在ES5中顶层对象的属性与全局变量是等价的
+ */
+window.a = 1;
+a // 1
+
+a = 2;
+window.a // 2
+
+// ES6规定 var命令和function命令声明的全局变量依旧是顶层对象的属性
+// 另一方面let和const、class命令声明的全局变量不属于顶层对象的属性
+var a = 1;
+// 如果在node的REPL环境可以写成global.a 或者写成 this.a
+window.a // 1
+let b = 1;
+window.b // undefined
+
+/**
+ * global对象
+ * ES5顶层对象
+ * 浏览器里面，顶层对象是window，但 Node 和 Web Worker 没有window。
+ * 浏览器和 Web Worker 里面，self也指向顶层对象，但是 Node 没有self。
+ * Node 里面，顶层对象是global，但其他环境都不支持。
+ */
