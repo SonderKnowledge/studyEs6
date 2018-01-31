@@ -135,3 +135,44 @@ let { loc, loc: { start }, loc: { start: { line }} } = node;
 line // 1
 loc // Object { start: Object }
 start // Object { line: 1, column: 5 }
+
+// 嵌套赋值的例子
+let obj = {};
+let arr = [];
+
+({ foo: obj.prop, bar: arr[0] } = { foo: 123, bar: true});
+obj // {prop:123}
+arr // [true]
+
+// 对象的解构也可以指定默认值
+var { x = 3 } = {};
+x // 3
+
+var { x, y = 5 } = { x: 1 };
+x // 1
+y // 5
+
+var { x: y = 3 } = {};
+y // 3
+
+var { x: y = 3 } = { x: 5 };
+y // 5
+
+var { message: msg = 'hello, world!' } = {};
+meg // hello, world!
+
+// 默认值生效的条件是对象的属性值严格等于 undefined
+var { x = 3 } = { x: undefined };
+x // 3
+
+var  { x = 3 } = { x: null };
+x // null
+
+// 如果将一个已经声明的变量用于解构赋值必须非常小心
+// 错误的写法
+// let x;
+// {x} = { x: 1 }; 报错默认{x}为一个代码块
+
+// 正确的写法
+let x;
+({x} = {x: 1});
