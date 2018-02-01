@@ -176,3 +176,43 @@ x // null
 // 正确的写法
 let x;
 ({x} = {x: 1});
+
+// 解构赋值允许等号左边的模式之中，不放置任何变量名。因此，可以写出非常古怪的赋值表达式。
+({} = [true, false]);
+({} = 'abc');
+({} = []);
+
+// 对象的解构赋值可以很方便的将现有对象的方法赋值到某个变量
+let { log, sin, cos } = Math; // log = Math.log 
+
+// 由于数组本质是特殊的对象因此可以对数组进行对象属性的解构
+let arr = [1, 2, 3];
+let {0: first, [arr.length - 1]: last} = arr;
+first // 1
+last // 3
+
+/**
+ * 字符创的解构赋值
+ * 字符串也可以解构赋值是因为字符串被转换成了一个类似数组的对象
+ */
+const [a, b, c, d, e] = 'hello';
+a // h
+b // e
+c // l
+d // l
+e // o
+
+// 类似数组的对象都有一个length属性因此还可以对这个属性解构赋值
+let {length: len} = 'hello';
+len // 5
+
+/**
+ * 数值和布尔值的解构赋值
+ */
+// 解构赋值时如果等号左边是数组和布尔值则会先转为对象
+// 解构赋值的规则是 只要等号右边的值不是对象或数组就将其转为对象
+let {toString: s} = 123;
+s === Number.prototype.toString // true
+
+let {toString: s} = true;
+s === Boolean.prototype.toString // true
