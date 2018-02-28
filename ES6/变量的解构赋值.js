@@ -211,8 +211,42 @@ len // 5
  */
 // 解构赋值时如果等号左边是数组和布尔值则会先转为对象
 // 解构赋值的规则是 只要等号右边的值不是对象或数组就将其转为对象
+// 由于undefined 和 null 无法转为对象所以对它们进行解构赋值都会报错
 let {toString: s} = 123;
 s === Number.prototype.toString // true
 
 let {toString: s} = true;
 s === Boolean.prototype.toString // true
+
+let {prop: x} = undefined; // TpyeEerroe
+let {prop: y} = null; // TypeError
+
+/**
+ * 函数参数的解构赋值
+ * 函数的参数也可以使用解构赋值
+ */
+// 函数add表面是一个数组但是在传入参数的那一刻就被解构成变量 x 和 y
+function add([x, y]) {
+  return x + y;
+}
+add([1, 2]); // 3
+
+[[1, 2], [3, 4]].map(([a, b]) => a + b); // [3, 7]
+
+// 函数参数的解构也可以使用默认值
+function move({x = 0, y = 0} = {}) {
+  return [x, y];
+}
+move({x: 3, y: 8}); // [3, 8]
+move({x: 3}) // [3, 0]
+move({}); // [0, 0]
+move(); // [0, 0]
+
+// 下面代码为函数move1的参数指定默认值而不是为变量x和y指定默认值
+function move1({x, y} = {x: 0, y: 0}) {
+  return [x, y];
+}
+move1({x: 3, y: 4}); // [3, 4]
+move1({x: 3}); // [3, undefined]
+move1({}); // [undefined, undefined]
+move1();
