@@ -250,3 +250,104 @@ move1({x: 3, y: 4}); // [3, 4]
 move1({x: 3}); // [3, undefined]
 move1({}); // [undefined, undefined]
 move1();
+
+// undefined会触发函数参数的默认值
+[1, undefined, 3].map((x = 'yes') => x); // [1, 'yes', 3]
+
+/**
+ * 圆括号问题
+ * 解构赋值对于编译器来说判断一个式子是模式还是表达式没有办法从一开始就知道
+ * ES6规则是只要有可能导致解构的歧义就不得使用圆括号
+ */
+// 不能使用圆括号的情况
+// 1. 变量声明语句
+// let [(a)] = [1];
+
+// let {x: (c)} = {};
+// let ({x: c}) = {};
+// let {(x: c)} = {};
+// let {(x): c} = {};
+
+// let { o: ({ p: p }) } = { o: { p: 2 } };
+
+// 2. 函数参数
+// 报错
+// function f([(z)]) { return z; }
+// 报错
+// function f([z,(x)]) { return x; }
+
+// 赋值语句模式
+// 全部报错
+// ({ p: a }) = { p: 42 };
+// ([a]) = [5];
+// 报错
+// [({ p: a }), { x: c }] = [{}, {}];
+
+/**
+ * 变量的解构赋值的用途
+ */
+// 1. 交换变量的值
+let x = 1;
+let y = 2;
+[x, y] = [y, x];
+
+// 2. 从函数返回多个值
+function example() {
+  return [1, 2, 3]
+}
+let [a, b, c] = example();
+
+function example1() {
+  return {
+    foo: 1,
+    bar: 2
+  };
+}
+let { foo, bar } = example1();
+
+// 3. 函数参数的定义
+// 参数是一组有次序的值
+function f([x, y, x]) {}
+f([1, 2, 3]);
+
+// 参数是一组无次序的值
+function f1({x, y, z}) {}
+f1({ z: 3, y: 2, x: 4});
+
+// 4. 提取JSON数据
+let jsonData = {
+  id: 42,
+  name: 'hhh',
+  data: [1, 2]
+};
+let { id, name, data } = jsonData;
+
+// 5. 函数参数的默认值
+data = function(url, {
+  async = true,
+  global = true
+}) {}
+
+// 6. 遍历Map解构
+const map = new Map();
+map.set('first', 'hello');
+map.set('second', 'world');
+
+for (let [key, value] of map) {
+  console.log(key + 'is' + value);
+}
+
+// 只获取键名
+for (let [key] of map) {
+  console.log(key);
+}
+
+// 只获取键值
+for (let [,value] of map) {
+  console.log(value);
+}
+
+/**
+ * 输入模块的指定方法
+ */
+const { SourceMapConsumer, SourceNode } = require("source-map");
